@@ -3,6 +3,11 @@ def call() {
     pipeline {
         agent any
         stages {
+            stage('Updating dependencies'){
+                steps {
+                    sh "npm i"
+                }
+            }
             stage('Build') {
                 steps {
                     sh "ng build"
