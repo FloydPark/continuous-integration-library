@@ -5,7 +5,7 @@ def call() {
         stages {
             stage('Build') {
                 steps {
-                    echo 'In progress...'
+                    sh 'node -v'
                 }
             }
             stage('Test') {
