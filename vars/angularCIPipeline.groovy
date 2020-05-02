@@ -5,12 +5,12 @@ def call() {
         stages {
             stage('Build') {
                 steps {
-                    sh "./ngw build"
+                    sh "ng build"
                 }
             }
             stage('Test') {
                 steps {
-                    sh "./ngw 'test --no-watch --no-progress --browsers=ChromeHeadlessCI'"
+                    sh "ng 'test --no-watch --no-progress --browsers=ChromeHeadlessCI'"
                 }
             }
             stage('Code analysis') {
