@@ -5,7 +5,7 @@ def call() {
         stages {
             stage('Build') {
                 steps {
-                    sh 'ng build'
+                    sh './ng build'
                 }
             }
             stage('Test') {
