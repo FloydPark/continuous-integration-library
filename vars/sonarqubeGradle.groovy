@@ -1,6 +1,7 @@
 def call(env){
 
     withSonarQubeEnv("SonarCloud") {
+        sh 'printenv'
         sh './gradlew sonarqube '+getProperties(env)
     }
 }
