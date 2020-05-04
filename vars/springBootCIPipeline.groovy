@@ -13,8 +13,10 @@ def call() {
                 }
             }
             stage('Code analysis') {
-                withSonarQubeEnv("SonarCloud") {
-                    sh './gradlew sonarqube'
+                steps{
+                    withSonarQubeEnv("SonarCloud") {
+                        sh './gradlew sonarqube'
+                    }
                 }
             }
             stage('Package and Upload artifact') {
