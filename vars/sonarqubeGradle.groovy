@@ -1,7 +1,5 @@
 def call(env){
-
     withSonarQubeEnv("SonarCloud") {
-        sh 'printenv'
         sh './gradlew sonarqube '+getProperties(env)
     }
 }
@@ -18,11 +16,11 @@ private String getProperties(env){
     }
     else
         if(branch.startsWith('PR-')){
-            println(env)
-//            def key = branch.split("-")[1]
-//            properties = "-Dsonar.pullrequest.base=develop"
-//            properties = "$properties -Dsonar.pullrequest.branch=$branch "
-//            properties = "$properties -Dsonar.pullrequest.key=$key "
+            def key = branch.split("-")[1]
+            branch = env.CHANGE_BRANCH
+            properties = "-Dsonar.pullrequest.base=develop"
+            properties = "$properties -Dsonar.pullrequest.branch=$branch"
+            properties = "$properties -Dsonar.pullrequest.key=$key"
         }
 
     return properties;
