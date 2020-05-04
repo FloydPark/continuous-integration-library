@@ -14,9 +14,7 @@ def call() {
             }
             stage('Code analysis') {
                 steps{
-                    withSonarQubeEnv("SonarCloud") {
-                        sh './gradlew sonarqube'
-                    }
+                    sonarqubeGradle(env)
                 }
             }
             stage('Package and Upload artifact') {
