@@ -19,8 +19,8 @@ def call() {
                 }
             }
             stage('Code analysis') {
-                steps {
-                    echo 'In progress...'
+                steps{
+                    sonarqubeJS(env)
                 }
             }
             stage('Package and Upload artifact') {
