@@ -22,6 +22,11 @@ def call() {
                     echo 'In progress...'
                 }
             }
+            stage('Hello World') {
+                steps {
+                    echo 'Hello World'
+                }
+            }
         }
     }
 }
