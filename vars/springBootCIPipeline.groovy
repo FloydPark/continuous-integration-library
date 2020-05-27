@@ -19,14 +19,9 @@ def call() {
             }
             stage('Package and Upload artifact') {
                 steps {
-                    echo 'In progress...'
+                    archivaPublish(env)
                 }
-            }
-            stage('Hello World') {
-                steps {
-                    echo 'Hello World'
-                }
-            }
+            }            
         }
     }
 }
