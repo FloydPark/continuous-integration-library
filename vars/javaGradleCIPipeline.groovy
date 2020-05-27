@@ -1,6 +1,11 @@
 def call() {
     pipeline {
         agent any
+        environment {            
+            URL_ARCHIVA_SNAPSHOTS = "${URL_ARCHIVA_SNAPSHOTS}"
+            URL_ARCHIVA_RELEASE = "${URL_ARCHIVA_RELEASE}"
+            ARCHIVA_CREDS = credentials('ARCHIVA_CREDS')
+        }        
         stages {
             stage('Build') {
                 steps {
@@ -19,7 +24,7 @@ def call() {
             }
             stage('Package and Upload artifact') {
                 steps {
-                    echo 'In progress...'
+                    archivaPublish(env)
                 }
             }
         }
