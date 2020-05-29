@@ -18,7 +18,16 @@ def call() {
                 }
             }
             stage('Code analysis') {
-                steps{
+                when {
+                    not {
+                        anyOf {
+
+                            branch "feature/*"
+                            branch "bugfix/*"                            
+                        }                        
+                    }
+                }
+                steps{                    
                     sonarqubeGradle(env)
                 }
             }
