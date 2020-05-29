@@ -33,8 +33,11 @@ def call() {
                 }
             }
             stage('Package and Upload artifact') {
-                steps {                    
-                    archivaPublish(env)
+                steps {
+                    script {
+                        def projectName = sh "./gradlew properties | grep 'name:' | awk {'print \$2'}"
+                        archivaPublish(env, projectName)
+                    }  
                 }
             }            
         }

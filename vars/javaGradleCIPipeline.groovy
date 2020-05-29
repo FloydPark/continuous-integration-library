@@ -5,6 +5,7 @@ def call() {
             URL_ARCHIVA_SNAPSHOTS = "${URL_ARCHIVA_SNAPSHOTS}"
             URL_ARCHIVA_RELEASE = "${URL_ARCHIVA_RELEASE}"
             ARCHIVA_CREDS = credentials('ARCHIVA_CREDS')
+            PROJECT_NAME = ""
         }        
         stages {
             stage('Build') {
@@ -17,22 +18,27 @@ def call() {
                     sh './gradlew test'
                 }
             }
-            stage('Code analysis') {
-                when {
-                    not {
-                        anyOf {
+            // stage('Code analysis') {
+            //     when {
+            //         not {
+            //             anyOf {
 
-                            branch "feature/*"
-                            branch "bugfix/*"                            
-                        }                        
-                    }
-                }
-                steps{                    
-                    sonarqubeGradle(env)
-                }
-            }
+            //                 branch "feature/*"
+            //                 branch "bugfix/*"                            
+            //             }                        
+            //         }
+            //     }
+            //     steps{                    
+            //         sonarqubeGradle(env)
+            //     }
+            // }
             stage('Package and Upload artifact') {
-                steps {
+                environment {
+                    //PROJECT_NAME = sh "./gradlew properties | grep 'name:' | awk {'print \$2'}"
+                    PROJECT_NAME = 'lib-commons-floydpark'
+                }
+                steps {       
+                    echo "${PROJECT_NAME}"             
                     archivaPublish(env)
                 }
             }
