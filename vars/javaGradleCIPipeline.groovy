@@ -5,6 +5,7 @@ def call() {
             URL_ARCHIVA_SNAPSHOTS = "${URL_ARCHIVA_SNAPSHOTS}"
             URL_ARCHIVA_RELEASE = "${URL_ARCHIVA_RELEASE}"
             ARCHIVA_CREDS = credentials('ARCHIVA_CREDS')
+            PROJECT_NAME = ""
         }        
         stages {
             stage('Build') {
@@ -17,23 +18,28 @@ def call() {
                     sh './gradlew test'
                 }
             }
-            stage('Code analysis') {
-                when {
-                    not {
-                        anyOf {
+             stage('Code analysis') {
+                 when {
+                     not {
+                         anyOf {
 
-                            branch "feature/*"
-                            branch "bugfix/*"                            
-                        }                        
-                    }
-                }
-                steps{                    
-                    sonarqubeGradle(env)
-                }
-            }
+                             branch "feature/*"
+                             branch "bugfix/*"
+                         }
+                     }
+                 }
+                 steps{
+                     sonarqubeGradle(env)
+                 }
+             }
             stage('Package and Upload artifact') {
+                environment {
+
+                    PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                }
                 steps {
-                    archivaPublish(env)
+
+                    archivaPublish(env, PROJECT_VERSION)
                 }
             }
         }

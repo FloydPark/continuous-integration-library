@@ -33,8 +33,13 @@ def call() {
                 }
             }
             stage('Package and Upload artifact') {
-                steps {                    
-                    archivaPublish(env)
+                environment {
+
+                    PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                }
+                steps {
+
+                    archivaPublish(env, PROJECT_VERSION)
                 }
             }            
         }
