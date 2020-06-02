@@ -18,28 +18,28 @@ def call() {
                     sh './gradlew test'
                 }
             }
-            // stage('Code analysis') {
-            //     when {
-            //         not {
-            //             anyOf {
+             stage('Code analysis') {
+                 when {
+                     not {
+                         anyOf {
 
-            //                 branch "feature/*"
-            //                 branch "bugfix/*"                            
-            //             }                        
-            //         }
-            //     }
-            //     steps{                    
-            //         sonarqubeGradle(env)
-            //     }
-            // }
+                             branch "feature/*"
+                             branch "bugfix/*"
+                         }
+                     }
+                 }
+                 steps{
+                     sonarqubeGradle(env)
+                 }
+             }
             stage('Package and Upload artifact') {
                 environment {
-                    //PROJECT_NAME = sh "./gradlew properties | grep 'name:' | awk {'print \$2'}"
-                    PROJECT_NAME = 'lib-commons-floydpark'
+
+                    PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
                 }
-                steps {       
-                    echo "${PROJECT_NAME}"             
-                    archivaPublish(env)
+                steps {
+
+                    archivaPublish(env, PROJECT_VERSION)
                 }
             }
         }
