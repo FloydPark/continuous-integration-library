@@ -1,7 +1,11 @@
 def call() {
-
     pipeline {
         agent any
+        environment {
+            URL_ARCHIVA_SNAPSHOTS = "${URL_ARCHIVA_SNAPSHOTS}"
+            URL_ARCHIVA_RELEASE = "${URL_ARCHIVA_RELEASE}"
+            ARCHIVA_CREDS = credentials('ARCHIVA_CREDS')
+        }
         stages {
             stage('Updating dependencies'){
                 steps {
@@ -33,8 +37,15 @@ def call() {
                 }
             }
             stage('Package and Upload artifact') {
+                environment {
+
+                    PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                }
                 steps {
-                    echo 'In progress...'
+
+                    sh "./gradlew zipSPA"
+                    archivaPublish(env, PROJECT_VERSION)
+                    sh "./gradlew cleanBuild"
                 }
             }
         }
