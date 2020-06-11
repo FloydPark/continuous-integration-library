@@ -9,6 +9,7 @@ def call() {
         stages {
             stage('Build') {
                 steps {
+                    sh './gradlew clean'
                     sh './gradlew build -x test'
                 }
             }
@@ -41,7 +42,20 @@ def call() {
 
                     archivaPublish(env, PROJECT_VERSION)
                 }
-            }            
+            }
+            stage('Build Docker Image and Push it to Registry') {
+                environment {
+
+                    PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                    PROJECT_NAME = sh (script: './gradlew properties | grep \'name:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                }
+                steps {
+                    script {
+
+                        dockerResolver(env, PROJECT_VERSION, PROJECT_NAME)
+                    }
+                }
+            }
         }
     }
 }
