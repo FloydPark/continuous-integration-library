@@ -36,16 +36,17 @@ def call() {
                     sonarqubeJS(env)
                 }
             }
-            stage('Package and Upload artifact') {
+            stage('Build Docker Image and Push it to Registry') {
                 environment {
 
                     PROJECT_VERSION = sh (script: './gradlew properties | grep \'version:\' | awk \'{print $2}\'', returnStdout: true).trim()
+                    PROJECT_NAME = sh (script: './gradlew properties | grep \'name:\' | awk \'{print $2}\'', returnStdout: true).trim()
                 }
                 steps {
+                    script {
 
-                    sh "./gradlew zipSPA"
-                    archivaPublish(env, PROJECT_VERSION)
-                    sh "./gradlew cleanBuild"
+                        dockerResolver(env, PROJECT_VERSION, PROJECT_NAME)
+                    }
                 }
             }
         }
