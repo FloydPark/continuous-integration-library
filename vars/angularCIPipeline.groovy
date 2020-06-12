@@ -1,11 +1,6 @@
 def call() {
     pipeline {
         agent any
-        environment {
-            URL_ARCHIVA_SNAPSHOTS = "${URL_ARCHIVA_SNAPSHOTS}"
-            URL_ARCHIVA_RELEASE = "${URL_ARCHIVA_RELEASE}"
-            ARCHIVA_CREDS = credentials('ARCHIVA_CREDS')
-        }
         stages {
             stage('Updating dependencies'){
                 steps {
